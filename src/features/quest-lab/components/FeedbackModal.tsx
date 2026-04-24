@@ -1,4 +1,4 @@
-import { Modal, Typography, Space, Divider, Alert, Badge, Tag } from 'antd';
+import { Modal, Typography, Space, Divider, Alert, Badge, Tag, Button } from 'antd';
 import { RocketOutlined, AuditOutlined, CompassOutlined } from '@ant-design/icons';
 import type { Quest } from '../types';
 
@@ -30,91 +30,93 @@ export const FeedbackModal: React.FC<Props> = ({ open, onClose, isCorrect, isSec
       maskClosable={false}
       className={`quest-feedback-modal ${isSecretMode ? 'secret' : isCorrect ? 'correct' : 'incorrect'}`}
     >
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <div style={{ fontSize: 40, marginBottom: 8 }}>
-          {isSecretMode ? '📜' : isCorrect ? '🎉 战法圆满' : '⚠️ 气机不顺'}
+      <div className="quest-feedback-modal__hero">
+        <div className="quest-feedback-modal__emoji" aria-hidden>
+          {isSecretMode ? '📜' : isCorrect ? '✨' : '◇'}
         </div>
         <Title level={3} style={{ marginTop: 0 }}>
-          {isSecretMode ? '武林秘籍：破阵锦囊' : isCorrect ? '破阵成功！' : '再思破阵之法'}
+          {isSecretMode ? '武林秘籍：破阵锦囊' : isCorrect ? '破阵成功' : '再思破阵之法'}
         </Title>
         <Paragraph type="secondary">
-          {isSecretMode 
-            ? '此处记载了此阵法的破解之钥，详读可助你登峰造极' 
-            : isCorrect ? `恭喜你解开了【${quest.title}】的奥秘` : '没关系，React 的世界中，失败是认知的良药'}
+          {isSecretMode
+            ? '此处记载了此阵法的破解之钥，详读可助你登峰造极'
+            : isCorrect
+              ? `你已解开「${quest.title}」的关窍`
+              : '在 React 的世界里，走弯路也是加深理解的一部分'}
         </Paragraph>
       </div>
 
       {isSecretMode && (
-        <div style={{ padding: '16px', background: 'rgba(255, 215, 0, 0.1)', borderRadius: 12, border: '1px solid #ffd700', marginBottom: 24 }}>
-          <Text strong style={{ color: '#d4af37', display: 'block', marginBottom: 8 }}>正确真气运行路径 (正确答案)：</Text>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <div className="quest-feedback-modal__secret-box">
+          <Text strong className="quest-feedback-modal__secret-label">
+            正确答案
+          </Text>
+          <div className="quest-feedback-modal__tags">
             {quest.missingParts.map((part, idx) => (
-              <Tag key={idx} color="gold" style={{ fontSize: 14, fontWeight: 'bold' }}>{part}</Tag>
+              <Tag key={idx} color="gold" style={{ fontSize: 13, fontWeight: 600, padding: '4px 12px' }}>
+                {part}
+              </Tag>
             ))}
           </div>
         </div>
       )}
 
-      <Divider style={{ margin: '16px 0' }} />
+      <Divider style={{ margin: '16px 0', borderColor: 'rgba(255,255,255,0.08)' }} />
 
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        {/* 1. 逻辑解析 (How it works) */}
         <div>
-          <Title level={5}>
-            <AuditOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-            战后复盘 (Code Analysis)
+          <Title level={5} className="quest-feedback-modal__section-title">
+            <AuditOutlined className="icon-audit" />
+            战后复盘
           </Title>
-          <div style={{ padding: '12px 16px', borderRadius: 8, background: 'rgba(24, 144, 255, 0.05)', marginTop: 8 }}>
-            <Paragraph style={{ marginBottom: 0, fontSize: 13, lineHeight: 1.7 }}>
-              {quest.explanation.howItWorks}
-            </Paragraph>
+          <div className="quest-feedback-modal__panel">
+            <Paragraph className="quest-feedback-modal__panel-text">{quest.explanation.howItWorks}</Paragraph>
           </div>
         </div>
 
-        {/* 2. 深度原理解析 (Principle Deep Dive) */}
         <div>
-          <Title level={5}>
-            <RocketOutlined style={{ marginRight: 8, color: '#6366f1' }} />
-            原理破壁 (Deep Principle)
+          <Title level={5} className="quest-feedback-modal__section-title">
+            <RocketOutlined className="icon-rocket" />
+            原理破壁
           </Title>
-          <Alert 
+          <Alert
             message="底层原理剖析"
             description={
-              <Text style={{ fontSize: 13, lineHeight: 1.8 }}>
+              <Text style={{ fontSize: 13, lineHeight: 1.8, color: 'rgba(226,232,240,0.88)' }}>
                 {quest.explanation.deepDive}
               </Text>
             }
             type="info"
             showIcon
-            icon={<RocketOutlined />}
-            style={{ borderRadius: 12, border: '1px solid rgba(99, 102, 241, 0.2)' }}
+            icon={<RocketOutlined className="icon-rocket" />}
           />
         </div>
 
-        {/* 3. 悟道总结 */}
         <div>
-          <Title level={5}>
-            <CompassOutlined style={{ marginRight: 8, color: '#52c41a' }} />
+          <Title level={5} className="quest-feedback-modal__section-title">
+            <CompassOutlined className="icon-compass" />
             悟道总结
           </Title>
-          <Badge.Ribbon text="悟" color="green">
-            <div style={{ padding: '20px', borderRadius: 12, border: '1px dashed #52c41a', background: 'rgba(82, 196, 26, 0.02)' }}>
-              <Paragraph strong style={{ marginBottom: 0, textAlign: 'center', fontSize: 16, fontStyle: 'italic', color: '#52c41a' }}>
-                “ {quest.explanation.conclusion} ”
-              </Paragraph>
+          <Badge.Ribbon text="悟" color="#10b981">
+            <div className="quest-feedback-modal__conclusion-wrap">
+              <div className="quest-feedback-modal__conclusion">
+                <Paragraph strong>「{quest.explanation.conclusion}」</Paragraph>
+              </div>
             </div>
           </Badge.Ribbon>
         </div>
       </Space>
 
-      <div style={{ marginTop: 32, textAlign: 'right' }}>
-        <button 
-          className="btn-primary" 
+      <div className="quest-feedback-modal__footer">
+        <Button
+          type="primary"
+          size="large"
+          block
+          className="quest-feedback-modal__action"
           onClick={isCorrect ? onNext : onClose}
-          style={{ width: '100%', height: 44, fontSize: 15 }}
         >
-          {isCorrect ? '开启下一道关卡 ➡️' : '我再想想'}
-        </button>
+          {isCorrect ? '开启下一道关卡' : '我再想想'}
+        </Button>
       </div>
     </Modal>
   );

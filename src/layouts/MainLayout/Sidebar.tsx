@@ -85,18 +85,10 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       {/* 底部信息 */}
-      <div
-        style={{
-          padding: '16px 20px',
-          borderTop: '1px solid var(--border-subtle)',
-          fontSize: 11,
-          color: 'var(--text-muted)',
-          lineHeight: 1.8,
-        }}
-      >
-        <div>📖 技术栈：React 18 + TypeScript</div>
-        <div>🎨 组件库：Ant Design 5</div>
-        <div>⚡ 构建工具：Vite</div>
+      <div className="sidebar-footer">
+        <div>React 18 · TypeScript</div>
+        <div>Ant Design 5</div>
+        <div>Vite</div>
       </div>
     </aside>
   );
